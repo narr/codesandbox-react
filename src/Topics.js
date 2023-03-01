@@ -10,21 +10,22 @@ import ErrorBoundary from "./error-boundary";
 import useReducer from "./useReducer";
 import customHook from "./custom-hook";
 import forwardRef from "./forwardRef";
+import ClassComponent from "./class-component";
 
 const Topics = {
   "optimize-rerender-simple": memo(OptRrSimple),
   "optimize-rerender-complex": memo(OptRrComplex),
   "optimize-rerender-context": memo(OptRrContext),
   "optimize-rerender-type-change (key)": memo(OptRrTypeChange),
-  "optimize-rerender-event-listener (useCallback, useMemo)": memo(
-    OptRrEventListener
-  ),
+  "optimize-rerender-event-listener (useCallback, useMemo)":
+    memo(OptRrEventListener),
   "batch-update": memo(batchUpdate),
   "useEffect-dependencies": memo(useEffectDependencies),
   "error-boundary": memo(ErrorBoundary),
   "useReducer (useContext)": memo(useReducer),
   "custom-hook (useLayoutEffect, createPortal)": memo(customHook),
-  "forwardRef (useImperativeHandle)": memo(forwardRef)
+  "forwardRef (useImperativeHandle)": memo(forwardRef),
+  "class component": memo(ClassComponent),
 };
 
 export default Topics;
