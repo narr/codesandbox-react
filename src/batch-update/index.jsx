@@ -11,7 +11,7 @@ function BatchUpdate() {
   const onClickHandler = () => {
     // render will happen only one time
     // count will be upated as prev count value + 1 even though
-    // there are two setCount
+    // there are two setCounts
     setCount(count + 1);
     setCount(count + 1);
     setCount2(count2 + 1);
