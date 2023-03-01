@@ -1,0 +1,89 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  height: 100%;
+  font-family: arial;
+}
+
+.app-wrapper {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+}
+
+.strict-mode-toggle label {
+  cursor: pointer;
+}
+
+.app-wrapper__app {
+}
+
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+}
+
+.topic-chooser {
+  max-height: 150px;
+  border-bottom: 1px solid palegreen;
+  overflow: auto;
+}
+
+.topic-chooser__title {
+  padding: 15px 0 20px 0;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.topic-chooser > ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, auto));
+  gap: 20px;
+  padding: 0 20px 30px;
+}
+
+.topic-chooser__option * {
+  cursor: pointer;
+}
+
+.topic-chooser__option > label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.topic-chooser__option input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.selected-topics {
+  padding-top: 20px;
+  overflow: auto;
+}
+
+.selected-topics__divider {
+  margin: 1rem 0;
+}
+
+.selected-topics__divider > hr {
+  margin: 2px 0;
+}
+
+.selected-topics__divider:last-child {
+  display: none;
+}

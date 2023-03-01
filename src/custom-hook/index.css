@@ -1,0 +1,10 @@
+.buttons-with-tooltip {
+  position: relative;
+}
+
+.tooltip {
+  color: white;
+  background: #222;
+  border-radius: 4px;
+  padding: 4px;
+}
