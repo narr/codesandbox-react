@@ -43,8 +43,8 @@ function BatchUpdate() {
     flushSync(() => {
       setCount3(count3 + 1);
     });
-    console.log("flushSync count3", count3);
-    console.log("flushSync domRef", domRef.current.textContent);
+    console.log("flushSync count3-2", count3);
+    console.log("flushSync domRef-2", domRef.current.textContent);
     // React has updated the DOM by now
   };
 
