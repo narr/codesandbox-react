@@ -11,7 +11,7 @@ function BatchUpdate() {
   const onClickHandler = () => {
     // render will happen only one time
     // count will be upated as prev count value + 1 even though
-    // there are two setCount
+    // there are two setCounts
     setCount(count + 1);
     setCount(count + 1);
     setCount2(count2 + 1);
@@ -43,8 +43,8 @@ function BatchUpdate() {
     flushSync(() => {
       setCount3(count3 + 1);
     });
-    console.log("flushSync count3", count3);
-    console.log("flushSync domRef", domRef.current.textContent);
+    console.log("flushSync count3-2", count3);
+    console.log("flushSync domRef-2", domRef.current.textContent);
     // React has updated the DOM by now
   };
 
