@@ -60,6 +60,16 @@ function Type4() {
   );
 }
 
+function Type5() {
+  console.log("Type5 rendered");
+  useEffect(() => {
+    return () => {
+      console.log("Type5 unmounted");
+    };
+  }, []);
+  return [<div key="1">Type5-1</div>, <div key="2">Type5-2</div>];
+}
+
 function CommonChild() {
   console.log("CommonChild rendered");
   useEffect(() => {
@@ -114,6 +124,7 @@ function TypeChange({ comp1, comp2 }) {
           <div>t4</div>
         </>
       )}
+      <Type5 key="Type5" />
     </>
   );
 }
