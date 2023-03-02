@@ -1,6 +1,6 @@
 // https://kentcdodds.com/blog/optimize-react-re-renders
 
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext, Profiler } from "react";
 
 const FormContext = createContext();
 
@@ -100,7 +100,7 @@ function SomeScreen() {
                   width: 40,
                   height: 40,
                   color: cell > 50 ? "white" : "black",
-                  backgroundColor: `rgba(0, 0, 0, ${cell / 100})`
+                  backgroundColor: `rgba(0, 0, 0, ${cell / 100})`,
                 }}
               >
                 {Math.floor(cell)}
@@ -167,8 +167,14 @@ export default function Complex() {
     setComp(e.target.value);
   }
 
+  function onRender(...params) {
+    const [id, phase, actualDuration, baseDuration, startTime, commitTime] =
+      params;
+    console.log(`render perf: ${comp}`, params);
+  }
+
   return (
-    <>
+    <Profiler onRender={onRender}>
       <div>
         <label>
           <input
@@ -192,6 +198,6 @@ export default function Complex() {
         </label>
       </div>
       {comp === "slow" ? <AppBefore /> : <AppAfter />}
-    </>
+    </Profiler>
   );
 }
