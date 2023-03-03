@@ -1,5 +1,5 @@
 import "./index.css";
-import { useState, useReducer, useMemo } from "react";
+import { useState, useReducer, useMemo, memo } from "react";
 
 const StageNames = {
   todo: "todo",
@@ -46,12 +46,12 @@ function getCurrentStageIndex(stages, currentStage) {
   return stages.findIndex((stage) => stage.name === currentStage);
 }
 
-function taskReducer(states, action) {
+function taskReducer(oldState, action) {
   switch (action.type) {
     case ActionTypes.create: {
       return {
-        ...states,
-        stages: states.stages.map((stage) => {
+        ...oldState,
+        stages: oldState.stages.map((stage) => {
           if (stage.name === StageNames.todo) {
             return {
               ...stage,
@@ -64,26 +64,26 @@ function taskReducer(states, action) {
     }
     case ActionTypes.select: {
       const stageIndex = getCurrentStageIndex(
-        states.stages,
+        oldState.stages,
         action.payload.stage
       );
       return {
-        ...states,
+        ...oldState,
         selectedTask: {
           task: action.payload.task,
           stage: action.payload.stage,
           canMovePrev: stageIndex > 0,
-          canMoveNext: stageIndex < states.stages.length - 1,
+          canMoveNext: stageIndex < oldState.stages.length - 1,
         },
       };
     }
     case ActionTypes.movePrev: {
       const stageIndex = getCurrentStageIndex(
-        states.stages,
+        oldState.stages,
         action.payload.stage
       );
       return {
-        stages: states.stages.map((stage, i) => {
+        stages: oldState.stages.map((stage, i) => {
           if (i === stageIndex) {
             return {
               ...stage,
@@ -98,20 +98,20 @@ function taskReducer(states, action) {
           return stage;
         }),
         selectedTask: {
-          ...states.selectedTask,
-          stage: states.stages[stageIndex - 1].name,
+          ...oldState.selectedTask,
+          stage: oldState.stages[stageIndex - 1].name,
           canMovePrev: stageIndex - 1 > 0,
-          canMoveNext: stageIndex - 1 < states.stages.length - 1,
+          canMoveNext: stageIndex - 1 < oldState.stages.length - 1,
         },
       };
     }
     case ActionTypes.moveNext: {
       const stageIndex = getCurrentStageIndex(
-        states.stages,
+        oldState.stages,
         action.payload.stage
       );
       return {
-        stages: states.stages.map((stage, i) => {
+        stages: oldState.stages.map((stage, i) => {
           if (i === stageIndex) {
             return {
               ...stage,
@@ -126,20 +126,20 @@ function taskReducer(states, action) {
           return stage;
         }),
         selectedTask: {
-          ...states.selectedTask,
-          stage: states.stages[stageIndex + 1].name,
+          ...oldState.selectedTask,
+          stage: oldState.stages[stageIndex + 1].name,
           canMovePrev: stageIndex + 1 > 0,
-          canMoveNext: stageIndex + 1 < states.stages.length - 1,
+          canMoveNext: stageIndex + 1 < oldState.stages.length - 1,
         },
       };
     }
     case ActionTypes.delete: {
       const stageIndex = getCurrentStageIndex(
-        states.stages,
+        oldState.stages,
         action.payload.stage
       );
       return {
-        stages: states.stages.map((stage, i) => {
+        stages: oldState.stages.map((stage, i) => {
           if (i === stageIndex) {
             return {
               ...stage,
@@ -157,19 +157,44 @@ function taskReducer(states, action) {
   }
 }
 
+const Stage = memo(
+  ({ name, tasks, onSelectTask }) => {
+    console.log(`Stage:${name} renders`);
+    return (
+      <div className="stage">
+        <h1>{name}</h1>
+        <div className="tasks">
+          {tasks.map((task) => (
+            <div
+              key={task}
+              className="task"
+              onClick={() => onSelectTask(name, task)}
+            >
+              {task}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  },
+  function arePropsEqual(oldProps, newProps) {
+    return oldProps.tasks === newProps.tasks;
+  }
+);
+
 function Todo() {
+  console.log("Todo root renders");
   const [state, dispatch] = useReducer(taskReducer, initialState);
   const [createTaskName, setCreateTaskName] = useState("");
 
-  const existingTasks = useMemo(
-    () =>
-      state.stages
-        .map((stage) => {
-          return stage.tasks;
-        })
-        .flatMap((v) => v),
-    [state.stages]
-  );
+  const existingTasks = useMemo(() => {
+    console.log("useMemo get value");
+    return state.stages
+      .map((stage) => {
+        return stage.tasks;
+      })
+      .flatMap((v) => v);
+  }, [state.stages]);
 
   const onCreateTaskNameChange = (e) => {
     setCreateTaskName(e.target.value.trim());
@@ -195,7 +220,7 @@ function Todo() {
     dispatch({
       type: ActionTypes.select,
       payload: {
-        stage: stage.name,
+        stage,
         task,
       },
     });
@@ -272,20 +297,12 @@ function Todo() {
       <br />
       <div className="stages">
         {state.stages.map((stage) => (
-          <div key={stage.name} className="stage">
-            <h1>{stage.name}</h1>
-            <div className="tasks">
-              {stage.tasks.map((task) => (
-                <div
-                  key={task}
-                  className="task"
-                  onClick={() => onSelectTask(stage, task)}
-                >
-                  {task}
-                </div>
-              ))}
-            </div>
-          </div>
+          <Stage
+            key={stage.name}
+            name={stage.name}
+            tasks={stage.tasks}
+            onSelectTask={onSelectTask}
+          />
         ))}
       </div>
     </div>
