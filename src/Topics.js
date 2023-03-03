@@ -11,6 +11,7 @@ import useReducer from "./useReducer";
 import customHook from "./custom-hook";
 import forwardRef from "./forwardRef";
 import ClassComponent from "./class-component";
+import Todo from "./tasks/todo";
 
 const Topics = {
   "optimize-rerender-simple": memo(OptRrSimple),
@@ -26,6 +27,7 @@ const Topics = {
   "custom-hook (useLayoutEffect, createPortal)": memo(customHook),
   "forwardRef (useImperativeHandle)": memo(forwardRef),
   "class component": memo(ClassComponent),
+  "task-todo": memo(Todo),
 };
 
 export default Topics;
